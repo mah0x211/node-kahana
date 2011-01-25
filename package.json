@@ -1,0 +1,13 @@
+{
+    "name" : "Kahana",
+    "author" : "Masatoshi Teruya <mah0x211@gmail.com>",
+    "version" : "1.0.0",
+    "license" : "BSD",
+    "main" : "./lib/Kahana",
+    "directories" : {
+        "lib" : "./lib" 
+    },
+    "engines" : {
+        "node" : ">= 0.2.6" 
+    }
+}
