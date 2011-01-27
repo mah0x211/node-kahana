@@ -1,7 +1,7 @@
 {
     "name" : "Kahana",
     "author" : "Masatoshi Teruya <mah0x211@gmail.com> (http://kontext.jp/)",
-    "version" : "1.0.0",
+    "version" : "1.0.1",
     "license" : "BSD",
     "main" : "./lib/Kahana",
     "directories" : {
