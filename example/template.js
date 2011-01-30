@@ -9,6 +9,6 @@ cs.renderString( text, hdf, function( data ){
 console.log( 'renderString: ' + data );
 } );
 
-cs.renderFile( './helloworld.txt', hdf, function( data ){
+cs.renderFile( __dirname + '/helloworld.txt', hdf, function( data ){
 	console.log( 'renderFile: ' + data );
 } );
