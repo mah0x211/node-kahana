@@ -80,6 +80,11 @@ char *ClearSilver::RenderString( STRING *page, const char *str, char *val )
 		if( !( estr = CHECK_NEOERR( hdf_init( &hdf ) ) ) &&
 			( !val || !( estr = CHECK_NEOERR( hdf_read_string( hdf, val ) ) ) ) &&
 			!( estr = CHECK_NEOERR( cs_init( &csp, hdf ) ) ) &&
+			!( estr = CHECK_NEOERR( cs_register_strfunc( csp, (char*)"url_escape", cgi_url_escape ) ) ) &&
+			!( estr = CHECK_NEOERR( cs_register_strfunc( csp, (char*)"html_escape", cgi_html_escape_strfunc ) ) ) &&
+			!( estr = CHECK_NEOERR( cs_register_strfunc( csp, (char*)"text_html", cgi_text_html_strfunc ) ) ) && 
+			!( estr = CHECK_NEOERR( cs_register_strfunc( csp, (char*)"js_escape", cgi_js_escape ) ) ) && 
+			!( estr = CHECK_NEOERR( cs_register_strfunc( csp, (char*)"html_strip", cgi_html_strip_strfunc ) ) ) &&
 			!( estr = CHECK_NEOERR( cs_parse_string( csp, parse, len ) ) ) ){
 			estr = CHECK_NEOERR( cs_render( csp, page, cbRender ) );
 		}
