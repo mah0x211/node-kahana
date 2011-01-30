@@ -5,8 +5,6 @@ var net = require('net'),
 
 function Server( addr, port )
 {
-	this.addr = addr;
-	this.port = port;
 	this.core = null;
 	
 	/** add observer:
@@ -16,7 +14,7 @@ function Server( addr, port )
 	kahana.NotificationCenter.AddObserver( 'WriteOut', this, 'WriteOut' );
 };
 
-Server.prototype.Listen = function( sender, notify, obj )
+Server.prototype.Listen = function( sender, notify, addr, port )
 {
 	console.log( 'receive notify: ' + notify + ' -> Listen' );
 	
@@ -24,9 +22,9 @@ Server.prototype.Listen = function( sender, notify, obj )
 	
 	this.core = net.createServer();
 	this.core.on( 'connection', function( sockObj ){ self.onConnect( sockObj ); } );
-	this.core.listen( this.port, this.addr );
+	this.core.listen( port, addr );
 	
-	console.log( 'Staring server running at ' + this.addr + ':' + this.port );
+	console.log( 'Staring server running at ' + addr + ':' + port );
 };
 
 Server.prototype.onConnect = function( sockObj )
@@ -63,14 +61,14 @@ Server.prototype.onData = function( sockObj, dataObj )
 	/** post notify: Incoming
 	* NotificationCenter.PostNotification( sender, notification:string, userdata:any_type );
 	*/
-	kahana.NotificationCenter.PostNotification( this, 'Incoming', { sock:sockObj, data:dataObj } );
+	kahana.NotificationCenter.PostNotification( this, 'Incoming', sockObj, dataObj );
 };
 
-Server.prototype.WriteOut = function( sender, notify, obj )
+Server.prototype.WriteOut = function( sender, notify, sockObj, msgObj )
 {
 	console.log( 'receive notify: ' + notify + ' -> WriteOut' );
-	obj.sock.write( JSON.stringify( obj.msg ) );
-	obj.sock.end();
+	sockObj.write( JSON.stringify( msgObj, null, ' ' ) );
+	sockObj.end();
 };
 
 
@@ -102,7 +100,7 @@ function Logic()
 			console.log( 'connected' );
 			self.client = clientObj;
 			// notify
-			kahana.NotificationCenter.PostNotification( self, 'Initialize', null );
+			kahana.NotificationCenter.PostNotification( self, 'Initialize' );
 		}
 	} );
 
@@ -110,7 +108,7 @@ function Logic()
 };
 
 
-Logic.prototype.DropTable = function( sender, notify, obj )
+Logic.prototype.DropTable = function( sender, notify )
 {
 	console.log( 'receive notify: ' + notify + ' -> DropTable');
 	
@@ -136,31 +134,31 @@ Logic.prototype.CreateTable = function()
 		}
 		else {
 			// post notify: Listen
-			kahana.NotificationCenter.PostNotification( self, 'Listen', null );
+			kahana.NotificationCenter.PostNotification( self, 'Listen', '127.0.0.1', 1977 );
 		}
 	} );
 };
 
-Logic.prototype.InsertTable = function( sender, notify, obj )
+Logic.prototype.InsertTable = function( sender, notify, sockObj, dataObj )
 {
 	console.log( 'receive notify: ' + notify + ' -> InsertTable' );
 	
 	var self = this;
 	
 	this.client.query( "INSERT INTO kahana_sample ( addr, req ) VALUES ( $1, $2 );", 
-						[obj.sock.remoteAddress, JSON.stringify( obj.data.toString('utf8') )],
+						[sockObj.remoteAddress, JSON.stringify( dataObj.toString('utf8') )],
 						function( errObj, rowObj ){
 		// post notify
 		if( errObj ){
-			kahana.NotificationCenter.PostNotification( self, 'WriteOut', { sock:obj.sock, msg:errObj } );
+			kahana.NotificationCenter.PostNotification( self, 'WriteOut', sockObj, errObj );
 		}
 		else {
-			self.SelectTable( obj );
+			self.SelectTable( sockObj );
 		}
 	} );
 };
 
-Logic.prototype.SelectTable = function( obj )
+Logic.prototype.SelectTable = function( sockObj )
 {
 	console.log( 'SelectTable: kahana_sample' );
 	
@@ -170,15 +168,15 @@ Logic.prototype.SelectTable = function( obj )
 	{
 		// notify
 		if( errObj ){
-			kahana.NotificationCenter.PostNotification( self, 'WriteOut', { sock:obj.sock, msg:errObj } );
+			kahana.NotificationCenter.PostNotification( self, 'WriteOut', sockObj, errObj );
 		}
 		else {
-			kahana.NotificationCenter.PostNotification( self, 'WriteOut', { sock:obj.sock, msg:rowObj } );
+			kahana.NotificationCenter.PostNotification( self, 'WriteOut', sockObj, rowObj );
 		}
 	} );
 };
 
 
 new Logic();
-new Server( '127.0.0.1', 1978 );
+new Server();
 

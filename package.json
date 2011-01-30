@@ -1,26 +1,41 @@
 {
     "name" : "Kahana",
-    "author" : "Masatoshi Teruya <mah0x211@gmail.com> (http://kontext.jp/)",
-    "keywords": ["observer", "template engine", "clearsilver"],
+    "keywords": [
+        "observer",
+        "template engine",
+        "ClearSilver" 
+    ],
     "description": "",
-    "version" : "1.1.3",
-    "license" : "BSD",
+    "homepage": "http://github.com/mah0x211/node-kahana",
+    "version" : "1.1.0",
+    "license" : [
+        {
+            "type": "BSD" 
+        } 
+    ],
     "main" : "./lib/Kahana",
     "directories" : {
         "lib" : "./lib" 
     },
-	"scripts" : {
-        "install" : "./install.sh"
+    "scripts" : {
+        "install" : "./install.sh" 
     },
     "engines" : {
         "node" : ">= 0.2.6" 
     },
-    "bugs" : {
-        "mail" : "" ,
-        "web" : "http://github.com/mah0x211/node-kahana/issues" 
-    },
+    "maintainers": [
+        {
+            "name": "Masatoshi Teruya",
+            "email": "mah0x211@gmail",
+            "web": "http://kontext.jp/" 
+        } 
+    ],
     "repository": {
         "type" : "git",
         "url": "http://github.com/mah0x211/node-kahana.git" 
+    },
+    "bugs" : {
+        "mail" : "" ,
+        "web" : "http://github.com/mah0x211/node-kahana/issues" 
     }
 }
