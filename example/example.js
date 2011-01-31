@@ -14,7 +14,7 @@ function Server( addr, port )
 	kahana.NotificationCenter.AddObserver( 'WriteOut', this, 'WriteOut' );
 };
 
-Server.prototype.Listen = function( sender, notify, addr, port )
+Server.prototype.Listen = function( pass, sender, notify, addr, port )
 {
 	console.log( 'receive notify: ' + notify + ' -> Listen' );
 	
@@ -64,7 +64,7 @@ Server.prototype.onData = function( sockObj, dataObj )
 	kahana.NotificationCenter.PostNotification( this, 'Incoming', sockObj, dataObj );
 };
 
-Server.prototype.WriteOut = function( sender, notify, sockObj, msgObj )
+Server.prototype.WriteOut = function( pass, sender, notify, sockObj, msgObj )
 {
 	console.log( 'receive notify: ' + notify + ' -> WriteOut' );
 	sockObj.write( JSON.stringify( msgObj, null, ' ' ) );
@@ -108,7 +108,7 @@ function Logic()
 };
 
 
-Logic.prototype.DropTable = function( sender, notify )
+Logic.prototype.DropTable = function( pass, sender, notify )
 {
 	console.log( 'receive notify: ' + notify + ' -> DropTable');
 	
@@ -139,7 +139,7 @@ Logic.prototype.CreateTable = function()
 	} );
 };
 
-Logic.prototype.InsertTable = function( sender, notify, sockObj, dataObj )
+Logic.prototype.InsertTable = function( pass, sender, notify, sockObj, dataObj )
 {
 	console.log( 'receive notify: ' + notify + ' -> InsertTable' );
 	
