@@ -14,7 +14,7 @@ function Run( name, ary )
 			next( ctx );
 		}
 		else{
-			next(true);// Math.ceil( Math.random()*2 ) - 1 );
+			next( Math.ceil( Math.random()*2 ) - 1 );
 		}
 	};
 	
