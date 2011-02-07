@@ -3,7 +3,7 @@ from os import unlink, symlink, popen
 from os.path import exists
 
 srcdir = '.'
-blddir = 'build'
+blddir = 'lib'
 VERSION = '0.0.1'
 
 def set_options(opt):
