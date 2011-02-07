@@ -21,7 +21,7 @@
         "install" : "./install.sh" 
     },
     "engines" : {
-        "node" : ">= 0.2.6" 
+        "node" : ">= 0.3.7" 
     },
     "maintainers": [
         {
@@ -30,6 +30,10 @@
             "web": "http://kontext.jp/" 
         } 
     ],
+    "dependencies": {
+        "formidable": ">= 0.9.11",
+        "mime": ">= 1.2.1" 
+    },
     "repository": {
         "type" : "git",
         "url": "http://github.com/mah0x211/node-kahana.git" 
