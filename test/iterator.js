@@ -1,7 +1,6 @@
 var fs = require('fs'),
 	util = require('util'),
-	Kahana = require('Kahana');
-
+	Kahana = require('../lib/Kahana');
 
 function Run( name, ary )
 {
@@ -9,11 +8,17 @@ function Run( name, ary )
 		console.log( 'finish: ' + ctx.name );
 	};
 	var execute = function( idx, last, ctx, next ){
-		console.log( ctx.name + '[' + idx + '] -> ' + ctx.ary[idx] + ' -> ' + last ); 
-		next( ctx );
+		// console.log( Math.ceil( Math.random()*2 ) - 1 );
+		console.log( ctx.name + '[' + idx + '] -> ' + ctx.ary[idx] + ' -> ' + last );
+		if( last ){
+			next( ctx );
+		}
+		else{
+			next(true);// Math.ceil( Math.random()*2 ) - 1 );
+		}
 	};
 	
-	Kahana.Iterate( 0, ary.length-1, cleanup, execute, { name:name, ary:ary } );
+	Kahana.Iterate( true, 0, ary.length-1, cleanup, execute, { name:name, ary:ary } );
 }
 
 process.nextTick( function(){
