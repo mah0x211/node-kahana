@@ -1,4 +1,4 @@
-var Kahana = require('Kahana');
+var Kahana = require('../lib/Kahana');
 
 function Application()
 {
@@ -94,7 +94,7 @@ Application.prototype.Allow = function( route, r, method, args, last, runNext )
 	this.AddLog( r, 'route[' + route + ']: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
 	
 	if( runNext ){
-		runNext();
+		runNext(true);
 	}
 	else {
 		this.CloseRequest( r );
@@ -107,7 +107,7 @@ Application.prototype.Handler = function( route, r, method, args, last, runNext 
 	this.AddLog( r, 'route[' + route + ']: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
 
 	if( runNext ){
-		runNext();
+		runNext(true);
 	}
 	else {
 		this.CloseRequest( r );
@@ -118,7 +118,7 @@ Application.prototype.Require = function( route, r, method, args, last, runNext 
 {
 	this.AddLog( r, 'route[' + route + ']: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
 	if( runNext ){
-		runNext();
+		runNext(true);
 	}
 	else {
 		this.CloseRequest( r );
@@ -129,24 +129,23 @@ Application.prototype.Detour = function( route, r, method, args, last, runNext )
 {
 	this.AddLog( r, 'route[' + route + '][Detour]: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
 	
-
-	var self = this;
-	var progress = function( bytes, totalbytes ){
-		console.log( 'progress: ' + bytes + '/' + totalbytes );
-	};
-	var finish = function( err, r )
-	{
-		if( runNext ){
-			runNext();
-		}
-		else {
-			self.CloseRequest( r );
-		}
-	};
-	
 	// if method post
 	if( r.req.method == 'POST' && !r.data )
 	{
+		var self = this;
+		var progress = function( bytes, totalbytes ){
+			console.log( 'progress: ' + bytes + '/' + totalbytes );
+		};
+		var finish = function( err, r )
+		{
+			if( runNext ){
+				runNext(true);
+			}
+			else {
+				self.CloseRequest( r );
+			}
+		};
+		
 		// get request data
 		if( this.server.RequestData( r, progress, finish ) ){
 			// close if return not 0
@@ -156,7 +155,7 @@ Application.prototype.Detour = function( route, r, method, args, last, runNext )
 	else
 	{
 		if( runNext ){
-			runNext();
+			runNext(true);
 		}
 		else {
 			this.CloseRequest( r );

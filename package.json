@@ -9,7 +9,7 @@
     ],
     "description": "tiny node.js framework",
     "homepage": "http://github.com/mah0x211/node-kahana",
-    "version" : "1.2.0",
+    "version" : "1.2.8",
     "license" : [
         {
             "type": "BSD" 
