@@ -22,6 +22,16 @@
 <h1><?cs alt:Page.title ?>sample page<?cs /alt ?></h1>
 <?cs include:'sample.htm' ?>
 
+<ul>
+<li><a href="/test1">/test1</a></li>
+<li><a href="/test1/test2/">/test1/test2/</a></li>
+<li><a href="/test1/test2/test4/">/test1/test2/test4/</a></li>
+<li><a href="/test1/test2/test6/">/test1/test2/test6/</a></li>
+<li><a href="/test1/test5/">/test1/test5/</a></li>
+<li><a href="/test1/test5/test3/">/test1/test5/test3/</a></li>
+<li><a href="/test1/test5/test3/test7/">/test1/test5/test3/test7/</a></li>
+</ul>
+
 <h2>parsed_url</h2>
 <ul>
 <?cs each:item = parsed_url ?>
