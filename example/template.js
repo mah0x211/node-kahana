@@ -11,12 +11,12 @@ function Render( tmpl )
 	
 	if( process.argv[3] ){
 		for( var i = 0; i < n; i++ ){
-			cs.renderString( tmpl, { items:['foo', 'bar', 'baz'] } );
+			cs.RenderString( tmpl, { items:['foo', 'bar', 'baz'] } );
 		}
 	}
 	else {
 		for( var i = 0; i < n; i++ ){
-			console.log( cs.renderString( tmpl, { items:['foo', 'bar', 'baz'] } ) );
+			console.log( cs.RenderString( tmpl, { items:['foo', 'bar', 'baz'] } ) );
 		}
 	}
 	console.log( +new Date() - ms + 'ms' + "\n" + util.inspect( process.memoryUsage() ) );	
