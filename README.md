@@ -1,6 +1,6 @@
 #node-kahana
 
-an implemented of my own user interface design script.
+tiny node.js application framework.
 
 ## Dependency
 

@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>Sample Page</title>
+</head>
+<body>
+<!-- ClearSilver Macro -->
+<?cs def:drilldown( node ) ?>
+<ul>
+<?cs each:item = node ?>
+<li><?cs name:item ?>: 
+<?cs if:subcount( item ) ?>
+<?cs call:drilldown( item ) ?>
+<?cs else ?>
+<?cs var:item ?>
+<?cs /if ?>
+</li>
+<?cs /each ?>
+</ul>
+<?cs /def ?>
+
+<h1>sample page</h1>
+
+<h2>parsed_url</h2>
+<ul>
+<?cs each:item = parsed_url ?>
+<li><?cs name:item ?>: <?cs var:html_escape( item ) ?></li>
+<?cs /each ?>
+</ul>
+
+
+<h2>cookie</h2>
+<?cs call:drilldown( cookie ) ?>
+
+<h2>method chain</h2>
+<ul>
+<?cs each:item = log ?>
+<li><?cs var:item ?></li>
+<?cs /each ?>
+</ul>
+
+<h2>post request</h2>
+<?cs call:drilldown( data ) ?>
+
+<form method="post" action="./" enctype="application/x-www-form-urlencoded">
+<fieldset>
+<legend>x-www-form-urlencoded</legend>
+<p>
+<label>text_field: <input type="text" name="text_field" value="" /></label><br />
+<label>password_field: <input type="password" name="passowrd_field" value="" /></label><br />
+<label>text1: <textarea name="text1" value=""></textarea></label><br />
+<input type="submit" value="submit" />
+</p>
+</fieldset>
+</form>
+
+<form method="post" action="./" enctype="multipart/form-data">
+<fieldset>
+<legend>multipart</legend>
+<p>
+<label>text_field: <input type="text" name="text_field" value="" /></label><br />
+<label>password_field: <input type="password" name="passowrd_field" value="" /></label><br />
+<label>text1: <textarea name="text1" value=""></textarea></label><br />
+<label>file1: <input type="file" name="file1" value="" /></label><br />
+<label>file2: <input type="file" name="file2" value="" /></label><br />
+<input type="submit" value="submit" />
+</p>
+</fieldset>
+</form>
+
+
+</body>
+</html>

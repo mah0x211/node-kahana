@@ -1,4 +1,4 @@
-var Kahana = require('../lib/Kahana');
+var Kahana = require('Kahana');
 
 function Application()
 {
