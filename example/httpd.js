@@ -59,8 +59,10 @@ Application.prototype.AddLog = function( r, log )
 	r.hdf.log.push( log );
 };
 
-Application.prototype.CloseRequest = function( r )
+Application.prototype.DeadEnd = function( last, r )
 {
+	// console.log( r.parsed_url.pathname + ': ' + new Error().stack );
+	
 	var self = this;
 	// received cookie
 	var cookie = this.server.RequestCookie( r );
@@ -93,36 +95,21 @@ Application.prototype.Allow = function( route, r, method, args, last, runNext )
 {
 	this.AddLog( r, 'route[' + route + ']: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
 	
-	if( runNext ){
-		runNext(true);
-	}
-	else {
-		this.CloseRequest( r );
-	}
+	runNext( last, r );
 };
 
 Application.prototype.Handler = function( route, r, method, args, last, runNext )
 {
-
 	this.AddLog( r, 'route[' + route + ']: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
-
-	if( runNext ){
-		runNext(true);
-	}
-	else {
-		this.CloseRequest( r );
-	}
+	
+	runNext( last, r );
 };
 
 Application.prototype.Require = function( route, r, method, args, last, runNext )
 {
 	this.AddLog( r, 'route[' + route + ']: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
-	if( runNext ){
-		runNext(true);
-	}
-	else {
-		this.CloseRequest( r );
-	}
+
+	runNext( last, r );
 };
 
 Application.prototype.Detour = function( route, r, method, args, last, runNext )
@@ -138,28 +125,18 @@ Application.prototype.Detour = function( route, r, method, args, last, runNext )
 		};
 		var finish = function( err, r )
 		{
-			if( runNext ){
-				runNext(true);
-			}
-			else {
-				self.CloseRequest( r );
-			}
+			runNext( last, r );
 		};
 		
 		// get request data
 		if( this.server.RequestData( r, progress, finish ) ){
 			// close if return not 0
-			this.CloseRequest( r );
+			this.DeadEnd( r );
 		}
 	}
 	else
 	{
-		if( runNext ){
-			runNext(true);
-		}
-		else {
-			this.CloseRequest( r );
-		}
+		runNext( last, r );
 	}
 };
 
