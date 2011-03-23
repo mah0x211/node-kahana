@@ -2,14 +2,12 @@
     "name" : "Kahana",
     "keywords": [
         "observer",
-        "template engine",
         "Router",
         "HTTP Server",
-        "ClearSilver" 
     ],
     "description": "tiny node.js framework",
     "homepage": "http://github.com/mah0x211/node-kahana",
-    "version" : "1.3.6",
+    "version" : "1.3.7",
     "license" : [
         {
             "type": "BSD" 
@@ -18,9 +16,6 @@
     "main" : "./lib/Kahana",
     "directories" : {
         "lib" : "./lib" 
-    },
-    "scripts" : {
-        "install" : "./install.sh" 
     },
     "engines" : {
         "node" : ">= 0.3.7" 
