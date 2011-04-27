@@ -4,14 +4,11 @@ tiny node.js application framework.
 
 ## Dependency
 
-* [ClearSilver 0.10.5](http://www.clearsilver.net/)
 * [node-formidable](http://github.com/felixge/node-formidable)
 * [node-mime](http://github.com/bentomas/node-mime)
 
 ## Installation
 
-    install ClearSilver
-	export CPPFLAGS="-I/installed/ClearSilver/header/dir $CPPFLAGS"
     npm install Kahana
 
 ## Features
