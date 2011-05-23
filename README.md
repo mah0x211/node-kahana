@@ -11,11 +11,6 @@ tiny node.js application framework.
 
     npm install Kahana
 
-## Features
-
-* Observer pattern
-* binding to ClearSilver template engine
-
 ## Example
 
 see ./example
