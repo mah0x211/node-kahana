@@ -1,8 +1,11 @@
-var Kahana = require('../lib/Kahana');
+var Kahana = require('../lib/Kahana'),
+	ClearSilver = require('ClearSilver');
 
 function Application()
 {
 	this.access_count = 0;
+	this.clearsilver = new ClearSilver;
+	
 	this.server = new Kahana.Server( this, __dirname + '/server/server.conf' );
 	this.server.Listen();
 }
@@ -45,10 +48,29 @@ Application.prototype.SIGUSR1 = function()
 	} );
 };
 
-// template rendering error
-Application.prototype.ParseError = function( err )
+// set document root to clearsilver
+Application.prototype.SetDocumentRoot = function( docroot )
 {
-	console.log( err );
+	this.clearsilver.SetDocumentRoot( docroot );
+};
+Application.prototype.Render = function( r, is_tmpl, callback )
+{
+	if( is_tmpl )
+	{
+		try {
+			r.page = this.clearsilver.RenderString( r.page, r.hdf );
+		}
+		catch( e ){
+			callback( e, r );
+		}
+		finally{
+			callback( undefined, r );
+		}
+	}
+	else {
+		callback( undefined, r );
+	}
+	return;
 };
 
 Application.prototype.AddLog = function( r, log )
@@ -57,6 +79,31 @@ Application.prototype.AddLog = function( r, log )
 		r.hdf.log = [];
 	}
 	r.hdf.log.push( log );
+};
+
+Application.prototype.CheckRequest = function( r, last, runNext )
+{
+	// if method post
+	if( r.req.method == 'POST' && !r.data )
+	{
+		var self = this,
+			progress = function( bytes, totalbytes ){
+				console.log( 'progress: ' + bytes + '/' + totalbytes );
+			},
+			finish = function( err, r ){
+				runNext( last, r );
+			};
+		
+		// get request data
+		if( this.server.RequestData( r, progress, finish ) ){
+			// close if return not 0
+			this.DeadEnd( r );
+		}
+	}
+	else
+	{
+		runNext( last, r );
+	}
 };
 
 Application.prototype.DeadEnd = function( last, r )
@@ -88,56 +135,32 @@ Application.prototype.DeadEnd = function( last, r )
 	} );
 }
 
-
-
 // implements
 Application.prototype.Allow = function( route, r, method, args, last, runNext )
 {
 	this.AddLog( r, 'route[' + route + ']: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
-	
 	runNext( last, r );
 };
 
 Application.prototype.Handler = function( route, r, method, args, last, runNext )
 {
 	this.AddLog( r, 'route[' + route + ']: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
-	
-	runNext( last, r );
+	this.CheckRequest( r, last, runNext );
 };
 
 Application.prototype.Require = function( route, r, method, args, last, runNext )
 {
 	this.AddLog( r, 'route[' + route + ']: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
-
 	runNext( last, r );
 };
+
+
 
 Application.prototype.Detour = function( route, r, method, args, last, runNext )
 {
 	this.AddLog( r, 'route[' + route + '][Detour]: call -> ' + method + ', args -> ' + args + ', last -> ' + last + ', runNext: ' + typeof( runNext ) );
 	
-	// if method post
-	if( r.req.method == 'POST' && !r.data )
-	{
-		var self = this;
-		var progress = function( bytes, totalbytes ){
-			console.log( 'progress: ' + bytes + '/' + totalbytes );
-		};
-		var finish = function( err, r )
-		{
-			runNext( last, r );
-		};
-		
-		// get request data
-		if( this.server.RequestData( r, progress, finish ) ){
-			// close if return not 0
-			this.DeadEnd( r );
-		}
-	}
-	else
-	{
-		runNext( last, r );
-	}
+	runNext( last, r );
 };
 
 new Application();
