@@ -57,6 +57,7 @@ Application.prototype.Render = function( r, is_tmpl, callback )
 {
 	if( is_tmpl )
 	{
+		this.server.SessionUpdate( r );
 		try {
 			r.page = this.clearsilver.RenderString( r.page, r.hdf );
 		}
@@ -110,19 +111,17 @@ Application.prototype.DeadEnd = function( last, r )
 {
 	// console.log( r.parsed_url.pathname + ': ' + new Error().stack );
 	
-	var self = this;
-	// received cookie
-	var cookie = this.server.RequestCookie( r );
+	var self = this,
+		// received cookie
+		cookie = this.server.RequestCookie( r );
 	
-	this.server.SetCookie( r, { name:'access_cookie', val:this.access_count++, path:'/' } );
+	this.server.SetCookie( r, { name:'access_cookie', val:this.access_count++, path:'/' }, true );
 	
 	r.hdf.parsed_url = r.parsed_url;
 	r.hdf.data = r.data;
 	// set received cookie
-	r.hdf.cookie = {};
-	for( var p in cookie ){
-		r.hdf.cookie[p] = cookie[p].join(', ' );
-	}
+	r.hdf.cookie = cookie;
+	r.hdf.session = r.session;
 	
 	this.server.MapToStorage( r, function( err, status, r )
 	{
