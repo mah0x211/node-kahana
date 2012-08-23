@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/mah0x211/node-kahana.png)](http://travis-ci.org/mah0x211/node-kahana)
 #node-kahana
 
 tiny node.js application framework.
